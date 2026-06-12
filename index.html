@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal.</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='5' fill='%231d1d1f'/></svg>">
+  <style>
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('./fonts/SF-Pro-Display-Semibold.otf') format('opentype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('./fonts/SF-Pro-Display-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro Text';
+      src: url('./fonts/SF-Pro-Text-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --ink: #1d1d1f;
+      --ink-muted: #86868b;
+      --brand-blue: #2563eb;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+      --font-text: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 22px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+    }
+
+    .page.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Hero ──────────────────────────────────────── */
+
+    .hero {
+      height: 40vh;
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 8.5vw, 88px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    /* ── Section ───────────────────────────────────── */
+
+    .section {
+      margin-bottom: 88px;
+    }
+
+    .section:last-child {
+      margin-bottom: 120px;
+    }
+
+    .eyebrow {
+      font-family: var(--font-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 24px;
+      line-height: 1.1;
+    }
+
+    /* ── Featured card (AlphaSeek) ─────────────────── */
+
+    .featured {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #4338ca 100%);
+      border-radius: 18px;
+      padding: 56px 48px 0;
+      color: #fff;
+      transition: transform 300ms var(--ease), box-shadow 300ms var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured:has(.featured-main:hover) {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.22);
+    }
+
+    .featured-main {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding-bottom: 36px;
+    }
+
+    .featured-wordmark {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 6vw, 60px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+
+    .featured-desc {
+      font-family: var(--font-text);
+      font-size: 21px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 36px;
+      letter-spacing: -0.005em;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      color: var(--brand-blue);
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      transition: transform 250ms var(--ease);
+    }
+
+    .pill .arrow {
+      transition: transform 250ms var(--ease);
+    }
+
+    .featured-main:hover .pill .arrow {
+      transform: translateX(3px);
+    }
+
+    .featured-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.16);
+      margin: 0 -48px;
+    }
+
+    .featured-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 22px 0 26px;
+    }
+
+    .stack-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.95);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-family: var(--font-text);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      text-decoration: none;
+      transition: background 200ms var(--ease), transform 200ms var(--ease);
+    }
+
+    .stack-chip:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-1px);
+    }
+
+    .stack-chip-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    /* ── Card grid ─────────────────────────────────── */
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      display: block;
+      background: var(--card);
+      border-radius: 14px;
+      padding: 22px 22px 24px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: transform 300ms var(--ease), box-shadow 300ms var(--ease);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .card-name {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.012em;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-family: var(--font-text);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    /* ── Error state ───────────────────────────────── */
+
+    .error {
+      padding: 24px;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink-muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+
+    @media (max-width: 880px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .section {
+        margin-bottom: 72px;
+      }
+      .section-title {
+        font-size: 32px;
+      }
+      .featured {
+        padding: 40px 32px 0;
+      }
+      .featured-divider {
+        margin: 0 -32px;
+      }
+      .featured-desc {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .page {
+        padding: 0 18px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        height: 34vh;
+        min-height: 220px;
+      }
+      .section {
+        margin-bottom: 56px;
+      }
+      .section-title {
+        font-size: 28px;
+      }
+      .featured-desc {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page" id="page">
+
+    <section class="hero">
+      <h1>Portal.</h1>
+    </section>
+
+    <section class="section" id="section-projects">
+      <div class="eyebrow">Projects</div>
+      <div id="featured-slot"></div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Infrastructure</h2>
+      <div class="grid" data-grid="infrastructure"></div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">AI</h2>
+      <div class="grid" data-grid="ai"></div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Tools</h2>
+      <div class="grid" data-grid="tools"></div>
+    </section>
+
+  </main>
+
+  <!-- ── Data ──────────────────────────────────────── -->
+  <script>
+    window.PORTAL_DATA = {
+      "featured": [
+        {
+          "name": "AlphaSeek",
+          "url": "https://alphaseekfinance.com",
+          "description": "Finance research platform",
+          "stack": [
+            { "label": "Live", "url": "https://alphaseekfinance.com", "icon": "globe" },
+            { "label": "Vercel", "url": "https://vercel.com/adam-vibe-coding-s-projects/alphaseek", "slug": "vercel" },
+            { "label": "Cloudflare", "url": "https://dash.cloudflare.com/34328f0a5d6bfcf29f122e2596856068/alphaseekfinance.com", "slug": "cloudflare" },
+            { "label": "Supabase", "url": "https://supabase.com/dashboard/project/kszsrzjppkzesuqixdfh", "slug": "supabase" },
+            { "label": "Gemini", "url": "https://aistudio.google.com/usage?timeRange=last-28-days", "slug": "googlegemini" },
+            { "label": "Resend", "url": "https://resend.com/emails", "slug": "resend" }
+          ]
+        }
+      ],
+      "infrastructure": [
+        { "name": "Supabase", "url": "https://supabase.com/dashboard/organizations", "slug": "supabase", "color": "3FCF8E", "description": "The backend." },
+        { "name": "Vercel", "url": "https://vercel.com/adam-vibe-coding-s-projects", "slug": "vercel", "color": "000000", "description": "Ships everything." },
+        { "name": "Cloudflare", "url": "https://dash.cloudflare.com/34328f0a5d6bfcf29f122e2596856068/home/overview", "slug": "cloudflare", "color": "F38020", "description": "The edge." },
+        { "name": "Apple Developer", "url": "https://developer.apple.com/enroll/purchase", "slug": "apple", "color": "000000", "description": "Sign and ship." },
+        { "name": "GitHub", "url": "https://github.com/", "slug": "github", "color": "181717", "description": "Where it lives." },
+        { "name": "Google AI Studio", "url": "https://aistudio.google.com/api-keys?project=gen-lang-client-0800915167", "slug": "googlegemini", "color": "4796E3", "description": "Keys to Gemini." }
+      ],
+      "ai": [
+        { "name": "Claude", "url": "https://claude.ai", "slug": "claude", "color": "D97757", "description": "Daily driver." },
+        { "name": "ChatGPT", "url": "https://chatgpt.com", "slug": "openai", "color": "412991", "description": "Second opinion." },
+        { "name": "Gemini", "url": "https://gemini.google.com", "slug": "googlegemini", "color": "4796E3", "description": "Google's brain." }
+      ],
+      "tools": [
+        { "name": "Gmail", "url": "https://mail.google.com", "slug": "gmail", "color": "EA4335", "description": "Mail." },
+        { "name": "WeChat File Helper", "url": "https://filehelper.weixin.qq.com/", "slug": "wechat", "color": "07C160", "description": "Files to phone." }
+      ]
+    };
+  </script>
+
+  <!-- ── Render ────────────────────────────────────── -->
+  <script>
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    const GLOBE_SVG = '<svg class="stack-chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>';
+
+    function renderStackChip(chip) {
+      let iconHtml = '';
+      if (chip.icon === 'globe') {
+        iconHtml = GLOBE_SVG;
+      } else if (chip.slug) {
+        iconHtml = `<img class="stack-chip-icon" src="https://cdn.simpleicons.org/${chip.slug}/ffffff" alt="" width="14" height="14">`;
+      }
+      return `<a class="stack-chip" href="${chip.url}" target="_blank" rel="noopener noreferrer">${iconHtml}<span>${escapeHtml(chip.label)}</span></a>`;
+    }
+
+    function renderFeatured(item) {
+      const slot = document.getElementById('featured-slot');
+      const article = document.createElement('article');
+      article.className = 'featured';
+
+      const stackHtml = (item.stack && item.stack.length)
+        ? `<div class="featured-divider"></div><div class="featured-stack">${item.stack.map(renderStackChip).join('')}</div>`
+        : '';
+
+      article.innerHTML = `
+        <a class="featured-main" href="${item.url}" target="_blank" rel="noopener noreferrer">
+          <div class="featured-wordmark">${escapeHtml(item.name)}</div>
+          <div class="featured-desc">${escapeHtml(item.description)}</div>
+          <span class="pill">Open<span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        ${stackHtml}
+      `;
+      slot.appendChild(article);
+    }
+
+    function renderGrid(key, items) {
+      const grid = document.querySelector(`[data-grid="${key}"]`);
+      if (!grid) return;
+      for (const item of items) {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = item.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        const iconUrl = `https://cdn.simpleicons.org/${item.slug}/${item.color}`;
+        a.innerHTML = `
+          <img class="card-icon" src="${iconUrl}" alt="${escapeHtml(item.name)}" loading="lazy" width="32" height="32">
+          <div class="card-name">${escapeHtml(item.name)}</div>
+          <div class="card-desc">${escapeHtml(item.description)}</div>
+        `;
+        grid.appendChild(a);
+      }
+    }
+
+    function init() {
+      const page = document.getElementById('page');
+      const data = window.PORTAL_DATA;
+      if (!data) {
+        document.getElementById('featured-slot').innerHTML =
+          `<div class="error">Could not load links.js.</div>`;
+      } else {
+        renderFeatured(data.featured[0]);
+        renderGrid('infrastructure', data.infrastructure);
+        renderGrid('ai', data.ai);
+        renderGrid('tools', data.tools);
+      }
+      requestAnimationFrame(() => page.classList.add('loaded'));
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
