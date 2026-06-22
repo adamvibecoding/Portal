@@ -141,6 +141,24 @@
       padding-bottom: 36px;
     }
 
+    .featured-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill--ghost {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+    }
+
+    .pill--ghost:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
     .featured-wordmark {
       font-family: var(--font-display);
       font-size: clamp(40px, 6vw, 60px);
@@ -163,6 +181,7 @@
     .pill {
       display: inline-flex;
       align-items: center;
+      text-decoration: none;
       gap: 6px;
       background: #fff;
       color: var(--brand-blue);
@@ -366,6 +385,7 @@
         {
           "name": "AlphaSeek",
           "url": "https://alphaseekfinance.com",
+          "about": "https://about.alphaseekfinance.com/",
           "description": "Finance Interview Prep",
           "stack": [
             { "label": "Vercel", "url": "https://vercel.com/adam-vibe-coding-s-projects/alphaseek", "slug": "vercel" },
@@ -432,12 +452,19 @@
         ? `<div class="featured-divider"></div><div class="featured-stack">${item.stack.map(renderStackChip).join('')}</div>`
         : '';
 
+      const aboutBtn = item.about
+        ? `<a class="pill pill--ghost" href="${item.about}" target="_blank" rel="noopener noreferrer">About</a>`
+        : '';
+
       article.innerHTML = `
-        <a class="featured-main" href="${item.url}" target="_blank" rel="noopener noreferrer">
+        <div class="featured-main">
           <div class="featured-wordmark">${escapeHtml(item.name)}</div>
           <div class="featured-desc">${escapeHtml(item.description)}</div>
-          <span class="pill">Open<span class="arrow" aria-hidden="true">→</span></span>
-        </a>
+          <div class="featured-actions">
+            <a class="pill" href="${item.url}" target="_blank" rel="noopener noreferrer">App</a>
+            ${aboutBtn}
+          </div>
+        </div>
         ${stackHtml}
       `;
       slot.appendChild(article);
